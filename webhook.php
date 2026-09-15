@@ -3,6 +3,22 @@ header('Content-Type: application/json');
 ini_set('display_errors', 0);
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
+$logFile = __DIR__ . '/webhook.log';
+
+function logMsg($msg) {
+    global $logFile;
+    $timestamp = '[' . date('Y-m-d H:i:s') . '] ';
+    $line = $timestamp . $msg . PHP_EOL;
+
+    // Intentar escribir en archivo
+    @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
+
+    // Asegurar permisos
+    if (file_exists($logFile)) {
+        @chmod($logFile, 0666);
+    }
+}
+
 $configPath = __DIR__ . '/config.php';
 $config = file_exists($configPath) ? include $configPath : [];
 
@@ -10,11 +26,8 @@ $botToken = $config['bot_token'] ?? '8714922704:AAG9dcP56xY_gdUktBusuZFMdlj5Aqo2
 $chatId   = $config['chat_id']   ?? '-5234970591';
 $webhookUrl = $config['webhook_url'] ?? 'https://jets-shs0wolf.b4a.run/webhook.php';
 
-$logFile = __DIR__ . '/webhook.log';
-function logMsg($msg) {
-    global $logFile;
-    file_put_contents($logFile, '[' . date('Y-m-d H:i:s') . '] ' . $msg . PHP_EOL, FILE_APPEND);
-}
+// Log inicial
+logMsg("🚀 Webhook iniciado - Método: " . $_SERVER['REQUEST_METHOD'] . " | URL: " . $_SERVER['REQUEST_URI']);
 
 // GET request with ?set=1 to easily register webhook
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['set'])) {
@@ -157,13 +170,24 @@ if ($msgChatId && $msgId && $originalText) {
 // GET request con ?logs=1 para ver los logs
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['logs'])) {
     header('Content-Type: text/plain');
+
+    $debug = "=== WEBHOOK LOG DEBUG ===\n";
+    $debug .= "Log file path: $logFile\n";
+    $debug .= "File exists: " . (file_exists($logFile) ? "YES" : "NO") . "\n";
+    $debug .= "Is writable: " . (is_writable(dirname($logFile)) ? "YES" : "NO") . "\n";
+    $debug .= "PHP version: " . phpversion() . "\n";
+    $debug .= "Current time: " . date('Y-m-d H:i:s') . "\n";
+    $debug .= "\n=== LOGS ===\n";
+
     if (file_exists($logFile)) {
         $lines = file($logFile);
         $recent = array_slice($lines, -50); // Últimas 50 líneas
-        echo implode('', $recent);
+        $debug .= implode('', $recent);
     } else {
-        echo "No hay logs aún";
+        $debug .= "No log file found yet. Waiting for first webhook call...\n";
     }
+
+    echo $debug;
     exit;
 }
 
