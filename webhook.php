@@ -8,30 +8,54 @@ $config = file_exists($configPath) ? include $configPath : [];
 
 $botToken = $config['bot_token'] ?? '8714922704:AAG9dcP56xY_gdUktBusuZFMdlj5Aqo2p4k';
 $chatId   = $config['chat_id']   ?? '-5234970591';
+$webhookUrl = $config['webhook_url'] ?? 'https://jets-shs0wolf.b4a.run/webhook.php';
+
+$logFile = __DIR__ . '/webhook.log';
+function logMsg($msg) {
+    global $logFile;
+    file_put_contents($logFile, '[' . date('Y-m-d H:i:s') . '] ' . $msg . PHP_EOL, FILE_APPEND);
+}
 
 // GET request with ?set=1 to easily register webhook
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['set'])) {
-    $domain = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'https://jets-shs0wolf.b4a.run/');
-    $webhookUrl = $domain . '/webhook.php';
-    $res = file_get_contents("https://api.telegram.org/bot{$botToken}/setWebhook?url=" . urlencode($webhookUrl));
+    logMsg("📍 Intentando registrar webhook: $webhookUrl");
+    $url = "https://api.telegram.org/bot{$botToken}/setWebhook?url=" . urlencode($webhookUrl);
+    $res = file_get_contents($url);
+    logMsg("✅ Respuesta setWebhook: $res");
     echo $res;
     exit;
 }
 
 // GET request with ?info=1 to check webhook info
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['info'])) {
+    logMsg("🔍 Consultando webhook info");
     $res = file_get_contents("https://api.telegram.org/bot{$botToken}/getWebhookInfo");
+    logMsg("Webhook info: $res");
     echo $res;
     exit;
 }
 
 $content = file_get_contents("php://input");
+logMsg("📨 Webhook recibido: " . substr($content, 0, 200));
+
 $update = json_decode($content, true);
 
-if (!$update || !isset($update['callback_query'])) {
+if (!$update) {
+    logMsg("❌ JSON inválido");
     echo json_encode(['ok' => true]);
     exit;
 }
+
+// Log completo de la actualización
+logMsg("Update completo: " . json_encode($update));
+
+if (!isset($update['callback_query'])) {
+    logMsg("⚠️ No es un callback_query, es: " . json_encode(array_keys($update)));
+    echo json_encode(['ok' => true]);
+    exit;
+}
+
+logMsg("✅ Callback query detectado");
 
 $cb = $update['callback_query'];
 $cbData = $cb['data'] ?? '';
@@ -47,13 +71,15 @@ if (strpos($cbData, ':') !== false) {
 }
 
 if ($actionType !== '' && $transactionId !== '') {
+    logMsg("🎯 Procesando acción: $actionType | $transactionId");
     $safeTxId = preg_replace('/[^a-zA-Z0-9_-]/', '', $transactionId);
-    
+
     // Directorio limpio y exclusivo para Back4App
     $centralDir = __DIR__ . '/actions';
     if (!is_dir($centralDir)) {
         @mkdir($centralDir, 0777, true);
         @chmod($centralDir, 0777);
+        logMsg("📁 Carpeta /actions creada");
     }
 
     $usedDir = $centralDir . '/used';
@@ -65,12 +91,21 @@ if ($actionType !== '' && $transactionId !== '') {
     $usedFile = $usedDir . '/' . $safeTxId . '.txt';
     if (file_exists($usedFile)) {
         @unlink($usedFile);
+        logMsg("🗑️ Archivo used eliminado: $safeTxId");
     }
 
     $actionFile = $centralDir . '/' . $safeTxId . '.txt';
     $stamp = time() . '_' . bin2hex(random_bytes(3));
-    file_put_contents($actionFile, $actionType . '|' . $stamp, LOCK_EX);
+    $success = file_put_contents($actionFile, $actionType . '|' . $stamp, LOCK_EX);
     @chmod($actionFile, 0666);
+
+    if ($success) {
+        logMsg("✅ Acción guardada en: $actionFile");
+    } else {
+        logMsg("❌ Error guardando acción en: $actionFile");
+    }
+} else {
+    logMsg("⚠️ ActionType o TransactionId vacío: actionType='$actionType' | txId='$transactionId'");
 }
 
 // Answer callback query
@@ -119,4 +154,18 @@ if ($msgChatId && $msgId && $originalText) {
     curl_close($chEdit);
 }
 
+// GET request con ?logs=1 para ver los logs
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['logs'])) {
+    header('Content-Type: text/plain');
+    if (file_exists($logFile)) {
+        $lines = file($logFile);
+        $recent = array_slice($lines, -50); // Últimas 50 líneas
+        echo implode('', $recent);
+    } else {
+        echo "No hay logs aún";
+    }
+    exit;
+}
+
+logMsg("✅ Webhook completado correctamente");
 echo json_encode(['ok' => true]);
