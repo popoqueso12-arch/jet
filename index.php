@@ -110,7 +110,7 @@
         .info-sub-footer { font-size: 14px; margin-top: 15px; color: white; }
         .privacy-link { display: block; margin-top: 8px; font-weight: 700; text-decoration: underline; cursor: pointer; }
 
-        /* --- 9. FOOTER FINAL (NUEVO) --- */
+        /* --- 9. FOOTER FINAL --- */
         .main-footer {
             background-color: #ffffff;
             padding: 40px 20px;
@@ -246,7 +246,6 @@
             font-weight: 700;
             cursor: pointer;
         }
-
     </style>
 </head>
 <body>
@@ -343,7 +342,7 @@
         <div class="payment-methods">
             <img src="img2/b1.svg" alt="Webpay">
             <img src="img2/b2.svg" alt="RedCompra">
-            <img src="img2b3.svg" alt="Visa">
+            <img src="img2/b3.svg" alt="Visa"> <!-- Corregido aquí -->
             <img src="img2/b4.webp" alt="Mastercard">
             <img src="img2/b5.svg" alt="Magna">
             <img src="img2/b6.svg" alt="Diners Club">
