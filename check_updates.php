@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
 
-// 1. Soportar tanto GET (como lo está pidiendo tu JS) como POST por seguridad
 $transaction_id = $_GET['transaction_id'] ?? '';
 
 if (empty($transaction_id)) {
@@ -16,24 +15,14 @@ if (empty($transaction_id)) {
 
 $safeTxId = preg_replace("/[^a-zA-Z0-9_-]/", "", (string)$transaction_id);
 
-$searchDirs = [
-    __DIR__ . "/actions",
-    "/var/www/colombia/actions",
-    "/var/www/ecuador/actions",
-    "/var/www/diente/actions",
-    __DIR__ . "/../actions"
-];
+// Ruta exclusiva y local para Back4App
+$actionFile = __DIR__ . "/actions/" . $safeTxId . ".txt";
 
 $action = null;
-foreach ($searchDirs as $dir) {
-    $actionFile = $dir . "/" . $safeTxId . ".txt";
-    if (file_exists($actionFile)) {
-        $content = trim(file_get_contents($actionFile));
-        // El webhook guarda 'accion|timestamp', extraemos únicamente la acción limpia
-        $parts = explode('|', $content);
-        $action = $parts[0] ?? '';
-        break;
-    }
+if (file_exists($actionFile)) {
+    $content = trim(file_get_contents($actionFile));
+    $parts = explode('|', $content);
+    $action = $parts[0] ?? '';
 }
 
 if (!empty($action)) {

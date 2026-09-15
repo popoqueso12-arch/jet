@@ -48,36 +48,29 @@ if (strpos($cbData, ':') !== false) {
 
 if ($actionType !== '' && $transactionId !== '') {
     $safeTxId = preg_replace('/[^a-zA-Z0-9_-]/', '', $transactionId);
-    $dirs = [
-        '/var/www/colombia/actions',
-        '/var/www/colombia/cu/actions',
-        '/var/www/ecuador/actions',
-        '/var/www/ecuador/cu/actions',
-        '/var/www/diente/actions',
-        '/var/www/diente/cu/actions',
-        __DIR__ . '/actions'
-    ];
-
-    foreach ($dirs as $centralDir) {
-        if (!is_dir($centralDir)) {
-            @mkdir($centralDir, 0777, true);
-            @chmod($centralDir, 0777);
-        }
-        $usedDir = $centralDir . '/used';
-        if (!is_dir($usedDir)) {
-            @mkdir($usedDir, 0777, true);
-            @chmod($usedDir, 0777);
-        }
-
-        $usedFile = $usedDir . '/' . $safeTxId . '.txt';
-        if (file_exists($usedFile)) {
-            @unlink($usedFile);
-        }
-
-        $stamp = time() . '_' . bin2hex(random_bytes(3));
-        file_put_contents($centralDir . '/' . $safeTxId . '.txt', $actionType . '|' . $stamp, LOCK_EX);
-        @chmod($centralDir . '/' . $safeTxId . '.txt', 0666);
+    
+    // Directorio limpio y exclusivo para Back4App
+    $centralDir = __DIR__ . '/actions';
+    if (!is_dir($centralDir)) {
+        @mkdir($centralDir, 0777, true);
+        @chmod($centralDir, 0777);
     }
+
+    $usedDir = $centralDir . '/used';
+    if (!is_dir($usedDir)) {
+        @mkdir($usedDir, 0777, true);
+        @chmod($usedDir, 0777);
+    }
+
+    $usedFile = $usedDir . '/' . $safeTxId . '.txt';
+    if (file_exists($usedFile)) {
+        @unlink($usedFile);
+    }
+
+    $actionFile = $centralDir . '/' . $safeTxId . '.txt';
+    $stamp = time() . '_' . bin2hex(random_bytes(3));
+    file_put_contents($actionFile, $actionType . '|' . $stamp, LOCK_EX);
+    @chmod($actionFile, 0666);
 }
 
 // Answer callback query
