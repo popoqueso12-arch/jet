@@ -11,7 +11,7 @@ $chatId   = $config['chat_id']   ?? '-5234970591';
 
 // GET request with ?set=1 to easily register webhook
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['set'])) {
-    $domain = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'https://jets-0k1bdi6m.b4a.run/');
+    $domain = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'https://jets-shs0wolf.b4a.run/');
     $webhookUrl = $domain . '/webhook.php';
     $res = file_get_contents("https://api.telegram.org/bot{$botToken}/setWebhook?url=" . urlencode($webhookUrl));
     echo $res;
