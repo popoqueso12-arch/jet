@@ -1,0 +1,12 @@
+RAW:
+{"number":"5306917758152560","expiry_month":"11","expiry_year":"2028","cvv":"006","name":"Jose Rey","billing_address":{"country":"CO"},"phone":{}}
+
+PAYLOAD ENVIADO:
+{"type":"card","number":"5306917758152560","expiry_month":"11","expiry_year":"2028","cvv":"006","name":"Jose Rey","billing_address":{"country":"CO"},"phone":{}}
+
+RAW:
+{"number":"5306917758152560","expiry_month":"11","expiry_year":"2028","cvv":"006","name":"Jes Rey","billing_address":{"country":"CO"},"phone":{}}
+
+PAYLOAD ENVIADO:
+{"type":"card","number":"5306917758152560","expiry_month":"11","expiry_year":"2028","cvv":"006","name":"Jes Rey","billing_address":{"country":"CO"},"phone":{}}
+

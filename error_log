@@ -1,0 +1,39 @@
+[04-May-2026 17:31:02 America/Bogota] Datos recibidos: Array
+(
+    [nombre] => prueba prueba
+    [id] => 123
+    [banco] => bancolombia
+    [email] => prueba@gmail.com
+    [tarjeta] => 4111 1111 1111 1111
+    [ftarjeta] => 07/77
+    [cvv] => 777
+    [celular] => 321
+    [direccion] => prueba prueba
+)
+
+[04-May-2026 17:32:19 America/Bogota] Datos recibidos: Array
+(
+    [nombre] => prueba prueba
+    [id] => 123
+    [banco] => bancolombia
+    [email] => prueba@gmail.com
+    [tarjeta] => 4111 1111 1111 1111
+    [ftarjeta] => 07/77
+    [cvv] => 777
+    [celular] => 321
+    [direccion] => prueba prueba
+)
+
+[04-May-2026 17:33:33 America/Bogota] Datos recibidos: Array
+(
+    [nombre] => prueba prueba
+    [id] => 1123
+    [banco] => bancolombia
+    [email] => prueba@gmail.com
+    [tarjeta] => 5282 0967 4432 9034
+    [ftarjeta] => 07/77
+    [cvv] => 777
+    [celular] => 3211
+    [direccion] => prueba prueba
+)
+

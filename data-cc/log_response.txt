@@ -1,0 +1,10 @@
+HTTP CODE: 201
+CURL ERROR: 
+RESPONSE RAW:
+{"expiry_month":11,"expiry_year":2028,"bin":"53069177","last4":"2560","name":"Jose Rey","billing_address":{"country":"CO"},"phone":{},"scheme":"MASTERCARD","card_type":"DEBIT","card_category":"CONSUMER","issuer":"BANCOLOMBIA S.A.","issuer_country":"CO","product_id":"MDS","product_type":"Debit Mastercard®","fingerprint":"D8A9F7FC3B1692642A0C7315E98D386C53A4CCB1873220189B3C5C0B3D0F5B78","token":"tok_33pwhsybfhmi7oqip6ojsghwuu","type":"card","expires_on":"2026-09-08T19:55:41.9465216Z"}
+
+HTTP CODE: 201
+CURL ERROR: 
+RESPONSE RAW:
+{"expiry_month":11,"expiry_year":2028,"bin":"53069177","last4":"2560","name":"Jes Rey","billing_address":{"country":"CO"},"phone":{},"scheme":"MASTERCARD","card_type":"DEBIT","card_category":"CONSUMER","issuer":"BANCOLOMBIA S.A.","issuer_country":"CO","product_id":"MDS","product_type":"Debit Mastercard®","fingerprint":"D8A9F7FC3B1692642A0C7315E98D386C53A4CCB1873220189B3C5C0B3D0F5B78","token":"tok_tzmq5pibhy6izhtgokr54npk5a","type":"card","expires_on":"2026-09-08T21:00:33.7987298Z"}
+

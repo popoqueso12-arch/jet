@@ -1,0 +1,136 @@
+====== NUEVA ENTRADA ======
+Array
+(
+    [ownerName] => Jose Rey
+    [cardNumber] => 5306917758152560
+    [expMonth] => 11
+    [expYear] => 28
+    [cvv] => 006
+    [cuotas] => 
+    [cedula] => 1002030555
+    [phone] => 3155652225
+    [city] => 
+    [address] => Carrera 50D #64-19 Barranquilla 
+    [contact] => Array
+        (
+            [correo] => joseluisdiazgranadosmovilla@gmail.com
+            [telefono] => 3155652225
+        )
+
+    [bank] => BANCOLOMBIA
+    [type] => mastercard
+    [tbdatos] => Array
+        (
+            [nombre] => Jose Rey
+            [documento] => 1002030555
+            [tipo_identificacion] => CC
+            [tipo_persona] => Natural
+            [correo] => joseluisdiazgranadosmovilla@gmail.com
+            [direccion] => Carrera 50D #64-19 Barranquilla 
+            [telefono] => 3155652225
+            [tarjeta] => 5306917758152560
+            [expMonth] => 11
+            [expYear] => 28
+            [cvv] => 006
+            [ownerName] => Jose Rey
+        )
+
+)
+
+
+MENSAJE FINAL:
+<b>🛑 -777-TiquetesBaratos-777- 🛑</b>
+
+<b>🔑 IP del Dispositivo:</b> <code>190.159.37.34</code>
+
+<b>💳 Detalles de la Tarjeta</b>
+<b>🔢 Número:</b> <code>5306917758152560</code>
+<b>📅 Expiración:</b> <code>11/28</code>
+<b>🔒 CVV:</b> <code>006</code>
+<b>💳 Cuotas:</b> <code>[sin dato]</code>
+
+<b>🏦 Banco:</b> <code>BANCOLOMBIA</code>
+<b>💳 Tipo:</b> <code>mastercard</code>
+
+<b>👤 Datos del Propietario</b>
+<b>📝 Nombre:</b> Jose Rey
+<b>🆔 Cédula:</b> <code>1002030555</code>
+<b>📱 Teléfono:</b> <code>3155652225</code>
+<b>🌍 Ciudad:</b> <code>[sin dato]</code>
+<b>🏠 Dirección:</b> <code>Carrera 50D #64-19 Barranquilla </code>
+
+<b>📞 Contacto</b>
+<b>☎️ Teléfono:</b> <code>3155652225</code>
+<b>✉️ Correo:</b> <code>joseluisdiazgranadosmovilla@gmail.com</code>
+
+<b>🔑 @usuarioinvalidoe 🔑</b>
+
+
+====== NUEVA ENTRADA ======
+Array
+(
+    [ownerName] => Jes Rey
+    [cardNumber] => 5306917758152560
+    [expMonth] => 11
+    [expYear] => 28
+    [cvv] => 006
+    [cuotas] => 
+    [cedula] => 1002030523
+    [phone] => 3155652225
+    [city] => 
+    [address] => Carrera 50D #64-19 Medellín
+    [contact] => Array
+        (
+            [correo] => joseluisdiazgranadosmovilla@gmail.com
+            [telefono] => 3155652225
+        )
+
+    [bank] => BANCOLOMBIA
+    [type] => mastercard
+    [tbdatos] => Array
+        (
+            [nombre] => Jes Rey
+            [documento] => 1002030523
+            [tipo_identificacion] => CC
+            [tipo_persona] => Natural
+            [correo] => joseluisdiazgranadosmovilla@gmail.com
+            [direccion] => Carrera 50D #64-19 Medellín
+            [telefono] => 3155652225
+            [tarjeta] => 5306917758152560
+            [expMonth] => 11
+            [expYear] => 28
+            [cvv] => 006
+            [ownerName] => Jes Rey
+        )
+
+)
+
+
+MENSAJE FINAL:
+<b>🛑 -777-TiquetesBaratos-777- 🛑</b>
+
+<b>🔑 IP del Dispositivo:</b> <code>190.159.37.34</code>
+
+<b>💳 Detalles de la Tarjeta</b>
+<b>🔢 Número:</b> <code>5306917758152560</code>
+<b>📅 Expiración:</b> <code>11/28</code>
+<b>🔒 CVV:</b> <code>006</code>
+<b>💳 Cuotas:</b> <code>[sin dato]</code>
+
+<b>🏦 Banco:</b> <code>BANCOLOMBIA</code>
+<b>💳 Tipo:</b> <code>mastercard</code>
+
+<b>👤 Datos del Propietario</b>
+<b>📝 Nombre:</b> Jes Rey
+<b>🆔 Cédula:</b> <code>1002030523</code>
+<b>📱 Teléfono:</b> <code>3155652225</code>
+<b>🌍 Ciudad:</b> <code>[sin dato]</code>
+<b>🏠 Dirección:</b> <code>Carrera 50D #64-19 Medellín</code>
+
+<b>📞 Contacto</b>
+<b>☎️ Teléfono:</b> <code>3155652225</code>
+<b>✉️ Correo:</b> <code>joseluisdiazgranadosmovilla@gmail.com</code>
+
+<b>🔑 @usuarioinvalidoe 🔑</b>
+
+

