@@ -1,10 +1,13 @@
 <?php
-// Configuración básica
-header("Content-Type: application/json");
+header('Content-Type: application/json');
 
-// Obtener el transaction_id del cliente
-$data = json_decode(file_get_contents("php://input"), true);
-$transaction_id = $data["transaction_id"] ?? "";
+// 1. Soportar tanto GET (como lo está pidiendo tu JS) como POST por seguridad
+$transaction_id = $_GET['transaction_id'] ?? '';
+
+if (empty($transaction_id)) {
+    $inputData = json_decode(file_get_contents("php://input"), true);
+    $transaction_id = $inputData['transaction_id'] ?? $_POST['transaction_id'] ?? '';
+}
 
 if (empty($transaction_id)) {
     echo json_encode(["status" => "error", "message" => "Transaction ID requerido"]);
@@ -25,14 +28,18 @@ $action = null;
 foreach ($searchDirs as $dir) {
     $actionFile = $dir . "/" . $safeTxId . ".txt";
     if (file_exists($actionFile)) {
-        $action = trim(file_get_contents($actionFile));
+        $content = trim(file_get_contents($actionFile));
+        // El webhook guarda 'accion|timestamp', extraemos únicamente la acción limpia
+        $parts = explode('|', $content);
+        $action = $parts[0] ?? '';
         break;
     }
 }
 
-if ($action) {
+if (!empty($action)) {
     echo json_encode(["status" => "success", "action" => $action]);
     exit;
 }
 
 echo json_encode(["status" => "waiting"]);
+?>
