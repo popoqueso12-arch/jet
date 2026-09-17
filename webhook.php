@@ -75,12 +75,20 @@ $cbData = $cb['data'] ?? '';
 $actionType = '';
 $transactionId = '';
 
+// Detectar separador: : o | o _
 if (strpos($cbData, ':') !== false) {
     list($actionType, $transactionId) = explode(':', $cbData, 2);
+    logMsg("✅ Separador ':' detectado");
 } elseif (strpos($cbData, '|') !== false) {
     list($actionType, $transactionId) = explode('|', $cbData, 2);
+    logMsg("✅ Separador '|' detectado");
+} elseif (strpos($cbData, '_') !== false) {
+    list($actionType, $transactionId) = explode('_', $cbData, 2);
+    logMsg("✅ Separador '_' detectado");
 } else {
     $actionType = $cbData;
+    $transactionId = '';
+    logMsg("⚠️ Sin separador reconocido, actionType: $actionType");
 }
 
 if ($actionType !== '' && $transactionId !== '') {
