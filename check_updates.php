@@ -9,10 +9,10 @@ if (empty($transaction_id)) {
 }
 
 $safeTxId = preg_replace("/[^a-zA-Z0-9_-]/", "", (string)$transaction_id);
-$actionFile = __DIR__ . "/actions/" . $safeTxId . ".txt";
+$actionFile = '/tmp/actions/' . $safeTxId . ".txt";
 
 // Leer la carpeta actions para ver qué archivos existen realmente
-$actionsDir = __DIR__ . "/actions";
+$actionsDir = '/tmp/actions';
 $existingFiles = is_dir($actionsDir) ? array_diff(scandir($actionsDir), ['.', '..', 'used']) : [];
 
 if (file_exists($actionFile)) {

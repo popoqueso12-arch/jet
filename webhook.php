@@ -2,7 +2,7 @@
 ini_set('display_errors', 0);
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
-$logFile = __DIR__ . '/webhook.log';
+$logFile = '/tmp/webhook.log';
 
 function logMsg($msg) {
     global $logFile;
@@ -23,7 +23,7 @@ if (isset($_GET['logs'])) {
     $debug  = "=== WEBHOOK DEBUG ===\n";
     $debug .= "Dir: " . __DIR__ . "\n";
     $debug .= "Writable: " . (is_writable(__DIR__) ? "YES" : "NO") . "\n";
-    $actionsDir = __DIR__ . '/actions';
+    $actionsDir = '/tmp/actions';
     $debug .= "Actions dir exists: " . (is_dir($actionsDir) ? "YES" : "NO") . "\n";
     if (is_dir($actionsDir)) {
         $files = array_diff(scandir($actionsDir), ['.', '..', 'used']);
@@ -55,8 +55,8 @@ if (isset($_GET['info'])) {
 // ── GET: ?test=1 — prueba si el filesystem persiste ───────────
 if (isset($_GET['test'])) {
     header('Content-Type: text/plain');
-    $testFile = __DIR__ . '/actions/test_' . time() . '.txt';
-    @mkdir(__DIR__ . '/actions', 0777, true);
+    $testFile = '/tmp/actions/test_' . time() . '.txt';
+    @mkdir('/tmp/actions', 0777, true);
     $wrote = file_put_contents($testFile, 'OK');
     $read  = file_exists($testFile) ? file_get_contents($testFile) : 'NO EXISTE';
     echo "Escritura: " . ($wrote !== false ? "OK ($wrote bytes)" : "FALLO") . "\n";
@@ -112,7 +112,7 @@ logMsg("Acción: '$actionType' | TxID: '$transactionId'");
 // Guardar acción en archivo
 if ($actionType !== '' && $transactionId !== '') {
     $safeTxId   = preg_replace('/[^a-zA-Z0-9_-]/', '', $transactionId);
-    $centralDir = __DIR__ . '/actions';
+    $centralDir = '/tmp/actions';
     @mkdir($centralDir, 0777, true);
     @mkdir($centralDir . '/used', 0777, true);
 
